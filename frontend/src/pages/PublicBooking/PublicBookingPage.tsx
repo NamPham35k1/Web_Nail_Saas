@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   ArrowLeft
 } from 'lucide-react';
+import { TEMPLATE_THEMES } from '../../config/templates';
 
 export const PublicBookingPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -151,30 +152,36 @@ export const PublicBookingPage: React.FC = () => {
     );
   }
 
-  const brandColor = salon.settings?.brandColor || '#D46B84';
+  const themeKey = salon.settings?.templateTheme || 'BLUSH_KOREA';
+  const theme = TEMPLATE_THEMES[themeKey] || TEMPLATE_THEMES.BLUSH_KOREA;
+  const brandColor = salon.settings?.brandColor || theme.primaryColor;
   const categories = ['ALL', ...Array.from(new Set(salon.services?.map((s: any) => s.category) || []))];
   const filteredServices = selectedCategory === 'ALL'
     ? (salon.services || [])
     : (salon.services || []).filter((s: any) => s.category === selectedCategory);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FAF8F9', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: theme.bgColor, color: theme.textColor, paddingBottom: '80px', transition: 'background-color 0.2s ease' }}>
       {/* Salon Hero Header */}
       <div style={{
         position: 'relative',
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid var(--border)'
+        backgroundColor: theme.cardBg,
+        borderBottom: `1px solid ${theme.borderColor}`
       }}>
         {/* Banner */}
         <div style={{
           height: '200px',
           backgroundColor: brandColor,
-          backgroundImage: salon.settings?.bannerUrl ? `url(${salon.settings.bannerUrl})` : `linear-gradient(135deg, ${brandColor} 0%, #1E293B 100%)`,
+          backgroundImage: salon.settings?.bannerUrl
+            ? `url(${salon.settings.bannerUrl})`
+            : theme.bannerPlaceholder
+            ? `url(${theme.bannerPlaceholder})`
+            : `linear-gradient(135deg, ${brandColor} 0%, #1E293B 100%)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           position: 'relative'
         }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.3)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.35)' }} />
         </div>
 
         {/* Salon Info Container */}
@@ -195,9 +202,9 @@ export const PublicBookingPage: React.FC = () => {
                   height: '100px',
                   borderRadius: '50%',
                   objectFit: 'cover',
-                  border: '4px solid #FFFFFF',
+                  border: `4px solid ${theme.cardBg}`,
                   boxShadow: 'var(--shadow-md)',
-                  backgroundColor: '#FFFFFF'
+                  backgroundColor: theme.cardBg
                 }}
               />
             ) : (
@@ -205,8 +212,8 @@ export const PublicBookingPage: React.FC = () => {
                 width: '100px',
                 height: '100px',
                 borderRadius: '50%',
-                backgroundColor: '#FFFFFF',
-                border: '4px solid #FFFFFF',
+                backgroundColor: theme.cardBg,
+                border: `4px solid ${theme.cardBg}`,
                 boxShadow: 'var(--shadow-md)',
                 display: 'flex',
                 alignItems: 'center',
@@ -220,9 +227,12 @@ export const PublicBookingPage: React.FC = () => {
 
             <div style={{ flex: 1, paddingBottom: '4px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#1E293B' }}>{salon.name}</h1>
+                <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: theme.textColor }}>{salon.name}</h1>
                 <span className="badge badge-confirmed" style={{ fontSize: '0.78rem' }}>
                   ● Nhận Lịch Trực Tuyến
+                </span>
+                <span style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '999px', background: `${brandColor}20`, color: brandColor, fontWeight: 700 }}>
+                  {theme.name}
                 </span>
               </div>
             </div>

@@ -129,12 +129,13 @@ router.post('/step', async (req: AuthenticatedRequest, res: Response): Promise<a
     }
 
     if (step === 2 && data) {
-      // Step 2: Branding (brandColor, logoUrl, bannerUrl, bookingPolicy)
-      const { brandColor, logoUrl, bannerUrl, bookingPolicy } = data;
+      // Step 2: Branding (brandColor, templateTheme, logoUrl, bannerUrl, bookingPolicy)
+      const { brandColor, templateTheme, logoUrl, bannerUrl, bookingPolicy } = data;
       await prisma.tenantSettings.upsert({
         where: { tenantId },
         update: {
           brandColor: brandColor || '#D46B84',
+          templateTheme: templateTheme || 'BLUSH_KOREA',
           logoUrl: logoUrl || null,
           bannerUrl: bannerUrl || null,
           bookingPolicy: bookingPolicy || null
@@ -142,6 +143,7 @@ router.post('/step', async (req: AuthenticatedRequest, res: Response): Promise<a
         create: {
           tenantId,
           brandColor: brandColor || '#D46B84',
+          templateTheme: templateTheme || 'BLUSH_KOREA',
           logoUrl: logoUrl || null,
           bannerUrl: bannerUrl || null,
           bookingPolicy: bookingPolicy || null

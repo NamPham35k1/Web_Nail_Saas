@@ -22,6 +22,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { TEMPLATE_THEMES } from '../../config/templates';
 
 export const OnboardingWizard: React.FC = () => {
   const { activeTenant, updateActiveTenant } = useAuth();
@@ -42,7 +43,8 @@ export const OnboardingWizard: React.FC = () => {
   const [description, setDescription] = useState('');
   const [slugStatus, setSlugStatus] = useState<{ available: boolean; message?: string } | null>(null);
 
-  // Step 2: Branding
+  // Step 2: Branding & Templates
+  const [templateTheme, setTemplateTheme] = useState('BLUSH_KOREA');
   const [brandColor, setBrandColor] = useState('#D46B84');
   const [logoUrl, setLogoUrl] = useState('');
   const [bannerUrl, setBannerUrl] = useState('');
@@ -100,6 +102,7 @@ export const OnboardingWizard: React.FC = () => {
 
         if (res.settings) {
           if (res.settings.brandColor) setBrandColor(res.settings.brandColor);
+          if (res.settings.templateTheme) setTemplateTheme(res.settings.templateTheme);
           if (res.settings.logoUrl) setLogoUrl(res.settings.logoUrl);
           if (res.settings.bannerUrl) setBannerUrl(res.settings.bannerUrl);
           if (res.settings.bookingPolicy) setBookingPolicy(res.settings.bookingPolicy);
@@ -151,7 +154,7 @@ export const OnboardingWizard: React.FC = () => {
       if (stepNumber === 1) {
         data = { name: salonName, slug, phone, address, description };
       } else if (stepNumber === 2) {
-        data = { brandColor, logoUrl, bannerUrl, bookingPolicy };
+        data = { brandColor, templateTheme, logoUrl, bannerUrl, bookingPolicy };
       } else if (stepNumber === 3) {
         data = { workingHours };
       } else if (stepNumber === 4) {
@@ -559,16 +562,94 @@ export const OnboardingWizard: React.FC = () => {
             <div>
               <div style={{ marginBottom: '24px' }}>
                 <span className="badge badge-trial" style={{ marginBottom: '6px' }}>Bước 2 trên 7</span>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '6px' }}>Logo & Màu Sắc Thương Hiệu</h2>
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '6px' }}>Chọn Phong Cách Template & Thương Hiệu</h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                  Tùy chỉnh phong cách website đặt lịch để đồng bộ với nhận diện thương hiệu của tiệm bạn.
+                  Chọn một mẫu giao diện phù hợp với gu thẩm mỹ của tiệm. Mọi màu sắc và chi tiết sẽ tự động biến đổi!
                 </p>
               </div>
 
-              {/* Color Presets */}
+              {/* Template Themes Selector */}
+              <div style={{ marginBottom: '28px' }}>
+                <label className="form-label" style={{ marginBottom: '12px', fontSize: '0.95rem' }}>
+                  Bộ Sưu Tập Template Giao Diện Website (Chọn 1 mẫu):
+                </label>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                  gap: '14px'
+                }}>
+                  {Object.values(TEMPLATE_THEMES).map((theme) => {
+                    const isSelected = templateTheme === theme.id;
+                    return (
+                      <div
+                        key={theme.id}
+                        onClick={() => {
+                          setTemplateTheme(theme.id);
+                          setBrandColor(theme.primaryColor);
+                        }}
+                        style={{
+                          border: isSelected ? `2.5px solid ${theme.primaryColor}` : '1.5px solid var(--border)',
+                          borderRadius: '16px',
+                          padding: '16px',
+                          background: theme.isDark ? '#0F172A' : '#FFFFFF',
+                          color: theme.isDark ? '#F8FAFC' : 'var(--text-main)',
+                          cursor: 'pointer',
+                          position: 'relative',
+                          boxShadow: isSelected ? `0 8px 24px -4px ${theme.primaryColor}40` : 'var(--shadow-sm)',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between'
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                            <span style={{
+                              fontSize: '0.7rem',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: '999px',
+                              background: `${theme.primaryColor}20`,
+                              color: theme.primaryColor
+                            }}>
+                              {theme.badge}
+                            </span>
+                            <div style={{
+                              width: '20px',
+                              height: '20px',
+                              borderRadius: '50%',
+                              backgroundColor: theme.primaryColor,
+                              border: isSelected ? '2px solid #FFF' : 'none'
+                            }} />
+                          </div>
+
+                          <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
+                            {theme.name}
+                          </h4>
+                          <div style={{ fontSize: '0.78rem', color: theme.primaryColor, fontWeight: 600, marginBottom: '6px' }}>
+                            {theme.subtitle}
+                          </div>
+                          <p style={{ fontSize: '0.8rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.4 }}>
+                            {theme.description}
+                          </p>
+                        </div>
+
+                        <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: isSelected ? theme.primaryColor : 'var(--text-muted)' }}>
+                            {isSelected ? '✓ Đang áp dụng' : 'Bấm để chọn'}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Color Customization */}
               <div className="form-group">
-                <label className="form-label">Màu Chủ Đạo Của Tiệm</label>
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '14px' }}>
+                <label className="form-label">Tùy Chỉnh Thêm Màu Chủ Đạo (Tùy chọn)</label>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
                   {colorPresets.map((preset) => (
                     <button
                       type="button"
@@ -578,21 +659,16 @@ export const OnboardingWizard: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
-                        padding: '8px 14px',
+                        padding: '6px 14px',
                         borderRadius: '999px',
                         border: brandColor === preset.color ? `2px solid ${preset.color}` : '1.5px solid var(--border)',
                         background: brandColor === preset.color ? 'var(--primary-light)' : '#FFFFFF',
                         cursor: 'pointer',
-                        fontSize: '0.85rem',
+                        fontSize: '0.82rem',
                         fontWeight: 600
                       }}
                     >
-                      <span style={{
-                        width: '18px',
-                        height: '18px',
-                        borderRadius: '50%',
-                        backgroundColor: preset.color
-                      }} />
+                      <span style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: preset.color }} />
                       <span>{preset.name}</span>
                     </button>
                   ))}

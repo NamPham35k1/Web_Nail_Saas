@@ -15,6 +15,7 @@ import {
   Save,
   CheckCircle2
 } from 'lucide-react';
+import { TEMPLATE_THEMES } from '../../config/templates';
 
 export const SettingsPage: React.FC = () => {
   const { activeTenant, updateActiveTenant } = useAuth();
@@ -35,7 +36,8 @@ export const SettingsPage: React.FC = () => {
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
 
-  // Form State: Branding
+  // Form State: Branding & Template
+  const [templateTheme, setTemplateTheme] = useState('BLUSH_KOREA');
   const [brandColor, setBrandColor] = useState('#D46B84');
   const [logoUrl, setLogoUrl] = useState('');
   const [bannerUrl, setBannerUrl] = useState('');
@@ -74,6 +76,7 @@ export const SettingsPage: React.FC = () => {
 
         if (t.settings) {
           setBrandColor(t.settings.brandColor || '#D46B84');
+          if (t.settings.templateTheme) setTemplateTheme(t.settings.templateTheme);
           setLogoUrl(t.settings.logoUrl || '');
           setBannerUrl(t.settings.bannerUrl || '');
           setBookingPolicy(t.settings.bookingPolicy || '');
@@ -119,7 +122,7 @@ export const SettingsPage: React.FC = () => {
     setMessage('');
 
     try {
-      await api.updateSettings({ brandColor, logoUrl, bannerUrl, bookingPolicy });
+      await api.updateSettings({ brandColor, templateTheme, logoUrl, bannerUrl, bookingPolicy });
       setMessage('Đã cập nhật thương hiệu & giao diện website thành công!');
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
@@ -339,14 +342,91 @@ export const SettingsPage: React.FC = () => {
       {/* TAB 2: Branding Settings */}
       {activeTab === 'branding' && (
         <div className="card" style={{ padding: '32px' }}>
-          <h3 style={{ fontSize: '1.25rem', marginBottom: '6px' }}>Màu Sắc & Logo Thương Hiệu</h3>
+          <h3 style={{ fontSize: '1.25rem', marginBottom: '6px' }}>Mẫu Giao Diện (Templates) & Thương Hiệu</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '24px' }}>
-            Tùy biến phong cách trang đặt lịch công khai của tiệm theo nhận diện thương hiệu riêng.
+            Chọn 1 trong 5 phong cách template độc quyền để thay đổi diện mạo website đặt lịch ngay lập tức.
           </p>
 
           <form onSubmit={handleSaveBranding}>
+            {/* Template Themes Selector */}
+            <div style={{ marginBottom: '28px' }}>
+              <label className="form-label" style={{ marginBottom: '12px', fontSize: '0.95rem' }}>
+                Chọn Mẫu Giao Diện Website (Templates):
+              </label>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '14px'
+              }}>
+                {Object.values(TEMPLATE_THEMES).map((theme) => {
+                  const isSelected = templateTheme === theme.id;
+                  return (
+                    <div
+                      key={theme.id}
+                      onClick={() => {
+                        setTemplateTheme(theme.id);
+                        setBrandColor(theme.primaryColor);
+                      }}
+                      style={{
+                        border: isSelected ? `2.5px solid ${theme.primaryColor}` : '1.5px solid var(--border)',
+                        borderRadius: '16px',
+                        padding: '16px',
+                        background: theme.isDark ? '#0F172A' : '#FFFFFF',
+                        color: theme.isDark ? '#F8FAFC' : 'var(--text-main)',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        boxShadow: isSelected ? `0 8px 24px -4px ${theme.primaryColor}40` : 'var(--shadow-sm)',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                          <span style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: '999px',
+                            background: `${theme.primaryColor}20`,
+                            color: theme.primaryColor
+                          }}>
+                            {theme.badge}
+                          </span>
+                          <div style={{
+                            width: '18px',
+                            height: '18px',
+                            borderRadius: '50%',
+                            backgroundColor: theme.primaryColor
+                          }} />
+                        </div>
+
+                        <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
+                          {theme.name}
+                        </h4>
+                        <div style={{ fontSize: '0.75rem', color: theme.primaryColor, fontWeight: 600, marginBottom: '6px' }}>
+                          {theme.subtitle}
+                        </div>
+                        <p style={{ fontSize: '0.78rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.4 }}>
+                          {theme.description}
+                        </p>
+                      </div>
+
+                      <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`, textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: isSelected ? theme.primaryColor : 'var(--text-muted)' }}>
+                          {isSelected ? '✓ Đang chọn' : 'Chọn mẫu'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="form-group">
-              <label className="form-label">Màu Chủ Đạo</label>
+              <label className="form-label">Tùy Chỉnh Thêm Màu Chủ Đạo</label>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
                 {colorPresets.map((p) => (
                   <button

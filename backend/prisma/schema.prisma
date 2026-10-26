@@ -67,6 +67,7 @@ model TenantSettings {
   tenantId            String   @unique
   brandColor          String   @default("#D46B84") // Rose-gold / blush default
   brandSecondaryColor String   @default("#FFF0F3")
+  templateTheme       String   @default("BLUSH_KOREA") // BLUSH_KOREA, NOIR_LUXURY, EMERALD_SPA, Y2K_CANDY, MINIMAL_CLEAN
   logoUrl             String?
   bannerUrl           String?
   bookingPolicy       String?  @default("Vui lòng đến đúng giờ trước 10 phút. Nếu có việc bận xin vui lòng báo trước ít nhất 2 tiếng.")

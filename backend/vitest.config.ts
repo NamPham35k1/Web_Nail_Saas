@@ -4,6 +4,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    env: {
+      NODE_ENV: 'test',
+      DATABASE_URL: 'file:./test.db'
+    },
     testTimeout: 20000,
     hookTimeout: 20000
   }

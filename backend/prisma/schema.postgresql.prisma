@@ -1,0 +1,222 @@
+// PostgreSQL Schema for Production (Render, Neon, Supabase, Docker, etc.)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String             @id @default(uuid())
+  email        String             @unique
+  passwordHash String
+  fullName     String
+  phone        String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  memberships  TenantMembership[]
+}
+
+model Tenant {
+  id              String            @id @default(uuid())
+  name            String
+  slug            String            @unique
+  phone           String?
+  email           String?
+  address         String?
+  description     String?
+  isPublished     Boolean           @default(false)
+  plan            String            @default("TRIAL") // TRIAL, BASIC, PRO
+  trialEndsAt     DateTime?
+  subscriptionStatus String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  memberships     TenantMembership[]
+  settings        TenantSettings?
+  workingHours    WorkingHours[]
+  services        Service[]
+  staff           Staff[]
+  appointments    Appointment[]
+  customers       Customer[]
+  promotions      Promotion[]
+  onboardingDraft OnboardingDraft?
+
+  @@index([slug])
+}
+
+model TenantMembership {
+  id        String   @id @default(uuid())
+  userId    String
+  tenantId  String
+  role      String   @default("OWNER") // OWNER, MANAGER, STAFF
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId])
+  @@index([userId])
+  @@index([tenantId])
+}
+
+model TenantSettings {
+  id                  String   @id @default(uuid())
+  tenantId            String   @unique
+  brandColor          String   @default("#D46B84")
+  brandSecondaryColor String   @default("#FFF0F3")
+  logoUrl             String?
+  bannerUrl           String?
+  bookingPolicy       String?  @default("Vui lòng đến đúng giờ trước 10 phút. Nếu có việc bận xin vui lòng báo trước ít nhất 2 tiếng.")
+  depositRequired     Boolean  @default(false)
+  depositAmount       Float?   @default(0)
+  slotIntervalMinutes Int      @default(30)
+  leadTimeHours       Int      @default(1)
+  maxAdvanceDays      Int      @default(30)
+  notice              String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model WorkingHours {
+  id         String   @id @default(uuid())
+  tenantId   String
+  dayOfWeek  Int      // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  isOpen     Boolean  @default(true)
+  openTime   String   @default("09:00")
+  closeTime  String   @default("20:00")
+  breakStart String?
+  breakEnd   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, dayOfWeek])
+  @@index([tenantId])
+}
+
+model Service {
+  id              String        @id @default(uuid())
+  tenantId        String
+  name            String
+  category        String        @default("Móng cơ bản")
+  durationMinutes Int           @default(45)
+  price           Float         @default(0)
+  description     String?
+  imageUrl        String?
+  isActive        Boolean       @default(true)
+  sortOrder       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([tenantId])
+  @@index([tenantId, category])
+}
+
+model Staff {
+  id           String        @id @default(uuid())
+  tenantId     String
+  name         String
+  phone        String?
+  email        String?
+  role         String        @default("Chuyên viên Nail")
+  avatarUrl    String?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([tenantId])
+}
+
+model Customer {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  phone       String
+  email       String?
+  notes       String?
+  totalVisits Int      @default(0)
+  totalSpent  Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, phone])
+  @@index([tenantId])
+  @@index([tenantId, phone])
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  tenantId        String
+  appointmentCode String
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  serviceId       String
+  staffId         String?
+  startTime       DateTime
+  endTime         DateTime
+  status          String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  notes           String?
+  totalPrice      Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  staff   Staff?  @relation(fields: [staffId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([tenantId, startTime])
+  @@index([tenantId, status])
+  @@index([tenantId, appointmentCode])
+}
+
+model OnboardingDraft {
+  id          String   @id @default(uuid())
+  tenantId    String   @unique
+  currentStep Int      @default(1)
+  isCompleted Boolean  @default(false)
+  draftData   String   @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model Promotion {
+  id              String    @id @default(uuid())
+  tenantId        String
+  code            String
+  description     String?
+  discountPercent Float?    @default(0)
+  discountAmount  Float?    @default(0)
+  validFrom       DateTime  @default(now())
+  validUntil      DateTime?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+}

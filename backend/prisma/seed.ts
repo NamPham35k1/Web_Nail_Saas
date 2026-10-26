@@ -61,7 +61,8 @@ async function main() {
       brandColor: '#D46B84', // Rose Gold / Soft Blush
       brandSecondaryColor: '#FFF0F5',
       logoUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=200&auto=format&fit=crop&q=80',
-      bannerUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=1200&auto=format&fit=crop&q=80',
+      bannerUrl: '/assets/salon_interior_luxury.jpg',
+      templateTheme: 'BLUSH_KOREA',
       bookingPolicy: 'Quý khách vui lòng đến trước 10 phút. Nếu hủy hoặc đổi lịch, xin báo trước 2 giờ.',
       slotIntervalMinutes: 30,
       leadTimeHours: 1,
@@ -91,13 +92,48 @@ async function main() {
     });
   }
 
-  // Services for Luna
+  // Services for Luna with real photography
   const lunaServicesData = [
-    { name: 'Sơn Gel Hàn Quốc Cao Cấp', category: 'Sơn Gel', durationMinutes: 45, price: 160000, description: 'Sơn gel bền đẹp 3-4 tuần, bảng màu hơn 300 tone màu xu hướng Hàn Quốc.' },
-    { name: 'Đắp Gel Nối Móng Tự Nhiên', category: 'Đắp Móng', durationMinutes: 75, price: 320000, description: 'Kéo dài móng nhẹ nhàng, không nặng tay, form móng chuẩn thanh lịch.' },
-    { name: 'Móng Úp Thiết Kế Nghệ Thuật', category: 'Móng Úp', durationMinutes: 60, price: 250000, description: 'Form móng trendy, gắn chắc chắn, đính charm & nhũ lấp lánh.' },
-    { name: 'Nail Art Vẽ Hoa Nổi & Phối Màu', category: 'Nail Art', durationMinutes: 40, price: 120000, description: 'Vẽ tay tinh tế từng ngón theo mẫu khách yêu cầu.' },
-    { name: 'Combo Cắt Da & Spa Dưỡng Móng OPI', category: 'Spa Chăm Sóc', durationMinutes: 35, price: 90000, description: 'Tẩy tế bào chết, ngâm nước ấm muối khoáng, massage tinh dầu dưỡng.' }
+    {
+      name: 'Sơn Gel Tráng Gương Nude',
+      category: 'Sơn Gel',
+      durationMinutes: 45,
+      price: 180000,
+      description: 'Sơn gel tráng gương ngọc trai bóng mịn, bền đẹp 3-4 tuần, bảng màu hơn 300 tone màu xu hướng.',
+      imageUrl: '/assets/french_chrome_nails.jpg'
+    },
+    {
+      name: 'Đắp Gel Nối Móng Tự Nhiên',
+      category: 'Đắp Móng',
+      durationMinutes: 75,
+      price: 320000,
+      description: 'Kéo dài móng nhẹ nhàng, không nặng tay, form móng chuẩn thanh lịch.',
+      imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'Móng Mắt Mèo Ngọc Bích Ánh Kim',
+      category: 'Nail Art',
+      durationMinutes: 60,
+      price: 260000,
+      description: 'Hiệu ứng mắt mèo velvet chuyển sắc huyền ảo, điểm xuyết lá vàng hoàng gia.',
+      imageUrl: '/assets/emerald_velvet_nails.jpg'
+    },
+    {
+      name: 'Nail Art Vẽ Hoa Nổi 3D Tinh Xảo',
+      category: 'Nail Art',
+      durationMinutes: 40,
+      price: 220000,
+      description: 'Vẽ tay tinh tế từng ngón, hoa nổi 3D kết hợp mắt mèo lấp lánh.',
+      imageUrl: '/assets/nail_art_showcase.jpg'
+    },
+    {
+      name: 'Combo Cắt Da & Spa Dưỡng Móng OPI',
+      category: 'Spa Chăm Sóc',
+      durationMinutes: 35,
+      price: 120000,
+      description: 'Tẩy tế bào chết, ngâm nước ấm muối khoáng, massage tinh dầu dưỡng.',
+      imageUrl: '/assets/luxury_nail_hero.jpg'
+    }
   ];
 
   const lunaServices = [];
@@ -222,6 +258,8 @@ async function main() {
       tenantId: miTenant.id,
       brandColor: '#2A9D8F', // Emerald Teal Accent
       brandSecondaryColor: '#E8F6F4',
+      bannerUrl: '/assets/emerald_velvet_nails.jpg',
+      templateTheme: 'EMERALD_SPA',
       bookingPolicy: 'Vui lòng báo trước nếu bạn đến muộn quá 15 phút.'
     }
   });
@@ -245,7 +283,20 @@ async function main() {
       category: 'Đắp Bột',
       durationMinutes: 90,
       price: 380000,
-      description: 'Kỹ thuật ombre mượt mà, bền chắc.'
+      description: 'Kỹ thuật ombre mượt mà, bền chắc phong cách Châu Âu sang trọng.',
+      imageUrl: '/assets/emerald_velvet_nails.jpg'
+    }
+  });
+
+  await prisma.service.create({
+    data: {
+      tenantId: miTenant.id,
+      name: 'Sơn Gel Tráng Gương Châu Âu',
+      category: 'Sơn Gel',
+      durationMinutes: 45,
+      price: 200000,
+      description: 'Tráng gương ngọc trai cao cấp chuẩn salon quốc tế.',
+      imageUrl: '/assets/french_chrome_nails.jpg'
     }
   });
 

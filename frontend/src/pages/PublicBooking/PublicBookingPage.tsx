@@ -278,8 +278,89 @@ export const PublicBookingPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Salon Lookbook Gallery: Thư Viện Mẫu Móng Đẹp Của Tiệm */}
+      <div style={{ maxWidth: '960px', margin: '24px auto 0', padding: '0 20px' }}>
+        <div style={{
+          backgroundColor: theme.cardBg,
+          borderRadius: '20px',
+          padding: '20px 24px',
+          border: `1px solid ${theme.borderColor}`,
+          boxShadow: 'var(--shadow-sm)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>📸</span>
+              <h3 style={{ fontSize: '1.08rem', fontWeight: 700, color: theme.textColor, margin: 0 }}>
+                Thư Viện Mẫu Móng Nổi Bật Của Tiệm
+              </h3>
+            </div>
+            <span style={{ fontSize: '0.8rem', color: theme.textMuted }}>
+              (Nhấn vào mẫu bất kỳ để chọn nhanh dịch vụ)
+            </span>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+            gap: '14px'
+          }}>
+            {(salon.services?.filter((s: any) => s.imageUrl)?.slice(0, 4) || []).map((item: any) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedService(item)}
+                style={{
+                  borderRadius: '14px',
+                  overflow: 'hidden',
+                  border: selectedService?.id === item.id ? `2px solid ${brandColor}` : `1px solid ${theme.borderColor}`,
+                  cursor: 'pointer',
+                  backgroundColor: theme.isDark ? '#1F293D' : '#FAF9FA',
+                  transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+                }}
+              >
+                <div style={{ height: '125px', overflow: 'hidden', position: 'relative' }}>
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    color: '#FFFFFF',
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700
+                  }}>
+                    {Number(item.price).toLocaleString()}đ
+                  </div>
+                </div>
+                <div style={{ padding: '8px 10px' }}>
+                  <div style={{
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    color: selectedService?.id === item.id ? brandColor : theme.textColor,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {item.name}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: theme.textMuted, display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
+                    <span>{item.durationMinutes} phút</span>
+                    <span style={{ color: brandColor, fontWeight: 600 }}>{selectedService?.id === item.id ? '✓ Đang chọn' : '+ Chọn mẫu'}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Main Booking Form Container */}
-      <div style={{ maxWidth: '960px', margin: '32px auto 0', padding: '0 20px' }}>
+      <div style={{ maxWidth: '960px', margin: '24px auto 0', padding: '0 20px' }}>
         <form onSubmit={handleBookingSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
           
           {/* LEFT COLUMN: Service & Staff Selection */}
@@ -328,8 +409,8 @@ export const PublicBookingPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* Services List */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '380px', overflowY: 'auto' }}>
+              {/* Services List with Images */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '420px', overflowY: 'auto', paddingRight: '4px' }}>
                 {filteredServices.map((s: any) => {
                   const isSelected = selectedService?.id === s.id;
                   return (
@@ -337,38 +418,74 @@ export const PublicBookingPage: React.FC = () => {
                       key={s.id}
                       onClick={() => setSelectedService(s)}
                       style={{
-                        padding: '14px 16px',
-                        borderRadius: '14px',
-                        border: isSelected ? `2px solid ${brandColor}` : '1.5px solid var(--border)',
-                        background: isSelected ? `${brandColor}0A` : '#FFFFFF',
+                        padding: '12px 14px',
+                        borderRadius: '16px',
+                        border: isSelected ? `2px solid ${brandColor}` : `1.5px solid ${theme.borderColor}`,
+                        background: isSelected ? `${brandColor}0D` : theme.cardBg,
                         cursor: 'pointer',
                         display: 'flex',
-                        justifyContent: 'space-between',
                         alignItems: 'center',
-                        transition: 'all 0.15s ease'
+                        gap: '14px',
+                        transition: 'all 0.15s ease',
+                        boxShadow: isSelected ? `0 4px 14px -3px ${brandColor}30` : 'none'
                       }}
                     >
-                      <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: isSelected ? brandColor : 'var(--text-main)' }}>
+                      {/* Thumbnail */}
+                      <div style={{ width: '64px', height: '64px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
+                        {s.imageUrl ? (
+                          <img
+                            src={s.imageUrl}
+                            alt={s.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        ) : (
+                          <div style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: `${brandColor}15`,
+                            color: brandColor,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '24px'
+                          }}>
+                            💅
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Details */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: isSelected ? brandColor : theme.textColor, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {s.name}
                         </div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                        <div style={{ fontSize: '0.8rem', color: theme.textMuted, display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                           <Clock size={12} /> {s.durationMinutes} phút
+                          {s.category && (
+                            <span style={{ fontSize: '0.72rem', padding: '1px 6px', borderRadius: '4px', backgroundColor: `${brandColor}15`, color: brandColor, fontWeight: 600 }}>
+                              {s.category}
+                            </span>
+                          )}
                         </div>
                         {s.description && (
-                          <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '4px' }}>
+                          <div style={{ fontSize: '0.78rem', color: theme.textMuted, marginTop: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {s.description}
                           </div>
                         )}
                       </div>
 
-                      <div style={{ textAlign: 'right' }}>
+                      {/* Pricing */}
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
                         <div style={{ fontWeight: 800, fontSize: '1.05rem', color: brandColor }}>
                           {Number(s.price).toLocaleString()}đ
                         </div>
-                        {isSelected && (
+                        {isSelected ? (
                           <span style={{ fontSize: '0.75rem', color: brandColor, fontWeight: 700 }}>
                             ✓ Đã chọn
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
+                            Chọn
                           </span>
                         )}
                       </div>

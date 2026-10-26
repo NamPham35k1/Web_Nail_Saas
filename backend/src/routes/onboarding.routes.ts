@@ -14,11 +14,11 @@ const SAMPLE_PRESET = {
   secondaryColor: '#FFF0F5',
   bookingPolicy: 'Quý khách vui lòng đến trước 10 phút. Nếu hủy hoặc đổi lịch, xin báo trước 2 giờ.',
   services: [
-    { name: 'Sơn Gel Hàn Quốc Cao Cấp', category: 'Sơn Gel', durationMinutes: 45, price: 160000, description: 'Sơn gel bền đẹp 3-4 tuần, bảng màu xu hướng.' },
-    { name: 'Đắp Gel Nối Móng Tự Nhiên', category: 'Đắp Móng', durationMinutes: 75, price: 300000, description: 'Nối móng chuẩn form thanh lịch, không đau rát.' },
-    { name: 'Móng Úp Thiết Kế Theo Mẫu', category: 'Móng Úp', durationMinutes: 60, price: 240000, description: 'Đính charm, đá sáng và kim tuyến lấp lánh.' },
-    { name: 'Nail Art Vẽ Nghệ Thuật (1 bộ)', category: 'Nail Art', durationMinutes: 40, price: 120000, description: 'Họa tiết vẽ tay tinh tế từng ngón.' },
-    { name: 'Cắt Da & Spa Dưỡng Móng OPI', category: 'Chăm Sóc Móng', durationMinutes: 30, price: 80000, description: 'Ngâm nước ấm muối khoáng và thoa serum dưỡng.' }
+    { name: 'Sơn Gel Tráng Gương Nude', category: 'Sơn Gel', durationMinutes: 45, price: 180000, description: 'Sơn gel bóng tráng gương bền đẹp 3-4 tuần, màu sắc hot trend.', imageUrl: '/assets/french_chrome_nails.jpg' },
+    { name: 'Đắp Gel Nối Móng Tự Nhiên', category: 'Đắp Móng', durationMinutes: 75, price: 320000, description: 'Nối móng chuẩn form thanh lịch, không đau rát, bền chắc.', imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&auto=format&fit=crop&q=80' },
+    { name: 'Móng Mắt Mèo Ngọc Bích Ánh Kim', category: 'Nail Art', durationMinutes: 60, price: 260000, description: 'Hiệu ứng mắt mèo chuyển sắc quý phái, điểm xuyết lá vàng.', imageUrl: '/assets/emerald_velvet_nails.jpg' },
+    { name: 'Nail Art Vẽ Hoa Nổi 3D Tinh Xảo', category: 'Nail Art', durationMinutes: 40, price: 220000, description: 'Họa tiết hoa nổi và nhũ xà cừ tinh tế từng ngón tay.', imageUrl: '/assets/nail_art_showcase.jpg' },
+    { name: 'Combo Cắt Da & Spa Dưỡng Móng OPI', category: 'Chăm Sóc Móng', durationMinutes: 30, price: 120000, description: 'Ngâm nước ấm muối khoáng, massage dầu dưỡng OPI cao cấp.', imageUrl: '/assets/luxury_nail_hero.jpg' }
   ],
   workingHours: [
     { dayOfWeek: 0, isOpen: true, openTime: '09:00', closeTime: '19:00' }, // Sun
@@ -294,7 +294,8 @@ router.post('/apply-sample', async (req: AuthenticatedRequest, res: Response): P
           category: s.category,
           durationMinutes: s.durationMinutes,
           price: s.price,
-          description: s.description
+          description: s.description,
+          imageUrl: s.imageUrl || null
         }
       });
     }

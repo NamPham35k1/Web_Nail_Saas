@@ -28,7 +28,7 @@ export const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
     textMuted: '#64748B',
     borderColor: '#F0E6EA',
     isDark: false,
-    bannerPlaceholder: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=1200&auto=format&fit=crop&q=80'
+    bannerPlaceholder: '/assets/salon_interior_luxury.jpg'
   },
   NOIR_LUXURY: {
     id: 'NOIR_LUXURY',
@@ -58,7 +58,7 @@ export const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
     textMuted: '#4B7B75',
     borderColor: 'rgba(42, 157, 143, 0.25)',
     isDark: false,
-    bannerPlaceholder: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&auto=format&fit=crop&q=80'
+    bannerPlaceholder: '/assets/emerald_velvet_nails.jpg'
   },
   Y2K_CANDY: {
     id: 'Y2K_CANDY',
@@ -73,7 +73,7 @@ export const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
     textMuted: '#701A75',
     borderColor: 'rgba(217, 70, 239, 0.25)',
     isDark: false,
-    bannerPlaceholder: 'https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=1200&auto=format&fit=crop&q=80'
+    bannerPlaceholder: '/assets/nail_art_showcase.jpg'
   },
   MINIMAL_CLEAN: {
     id: 'MINIMAL_CLEAN',
@@ -88,6 +88,6 @@ export const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
     textMuted: '#64748B',
     borderColor: '#E2E8F0',
     isDark: false,
-    bannerPlaceholder: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80'
+    bannerPlaceholder: '/assets/french_chrome_nails.jpg'
   }
 };

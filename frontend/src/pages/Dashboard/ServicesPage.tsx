@@ -14,6 +14,7 @@ export const ServicesPage: React.FC = () => {
   const [durationMinutes, setDurationMinutes] = useState(45);
   const [price, setPrice] = useState(150000);
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -40,6 +41,7 @@ export const ServicesPage: React.FC = () => {
     setDurationMinutes(45);
     setPrice(150000);
     setDescription('');
+    setImageUrl('');
     setError('');
     setShowModal(true);
   };
@@ -51,6 +53,7 @@ export const ServicesPage: React.FC = () => {
     setDurationMinutes(s.durationMinutes);
     setPrice(s.price);
     setDescription(s.description || '');
+    setImageUrl(s.imageUrl || '');
     setError('');
     setShowModal(true);
   };
@@ -67,7 +70,8 @@ export const ServicesPage: React.FC = () => {
           category,
           durationMinutes: Number(durationMinutes),
           price: Number(price),
-          description
+          description,
+          imageUrl: imageUrl.trim() || null
         });
       } else {
         await api.createService({
@@ -75,7 +79,8 @@ export const ServicesPage: React.FC = () => {
           category,
           durationMinutes: Number(durationMinutes),
           price: Number(price),
-          description
+          description,
+          imageUrl: imageUrl.trim() || null
         });
       }
       setShowModal(false);
@@ -152,31 +157,58 @@ export const ServicesPage: React.FC = () => {
                       style={{
                         border: '1.5px solid var(--border)',
                         borderRadius: '16px',
-                        padding: '18px',
+                        padding: '16px',
                         background: '#FFFFFF',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
+                        gap: '12px',
                         transition: 'transform 0.15s ease, box-shadow 0.15s ease'
                       }}
                     >
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                          <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>{s.name}</h4>
-                          <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)' }}>
-                            {Number(s.price).toLocaleString()}đ
-                          </span>
+                      <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                        {/* Service Thumbnail */}
+                        <div style={{ width: '56px', height: '56px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
+                          {s.imageUrl ? (
+                            <img
+                              src={s.imageUrl}
+                              alt={s.name}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          ) : (
+                            <div style={{
+                              width: '100%',
+                              height: '100%',
+                              backgroundColor: 'var(--primary-light)',
+                              color: 'var(--primary)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '22px'
+                            }}>
+                              💅
+                            </div>
+                          )}
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                          <Clock size={14} /> Thời lượng: <strong>{s.durationMinutes} phút</strong>
-                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
+                            <h4 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>{s.name}</h4>
+                            <span style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--primary)', flexShrink: 0, marginLeft: '8px' }}>
+                              {Number(s.price).toLocaleString()}đ
+                            </span>
+                          </div>
 
-                        {s.description && (
-                          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '14px' }}>
-                            {s.description}
-                          </p>
-                        )}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                            <Clock size={13} /> {s.durationMinutes} phút
+                          </div>
+
+                          {s.description && (
+                            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.4, margin: 0 }}>
+                              {s.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
@@ -292,6 +324,45 @@ export const ServicesPage: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Link Hình Ảnh Mẫu Móng (Tùy chọn)</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="/assets/french_chrome_nails.jpg hoặc link ảnh online"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                />
+                <div style={{ marginTop: '8px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  Gợi ý ảnh mẫu sẵn có (click chọn nhanh):
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+                  {[
+                    { label: '✨ Tráng Gương Nude', url: '/assets/french_chrome_nails.jpg' },
+                    { label: '🌸 Hoa Nổi 3D', url: '/assets/nail_art_showcase.jpg' },
+                    { label: '💎 Mắt Mèo Ngọc Bích', url: '/assets/emerald_velvet_nails.jpg' },
+                    { label: '🌿 Spa & Dưỡng OPI', url: '/assets/luxury_nail_hero.jpg' }
+                  ].map((p) => (
+                    <button
+                      key={p.url}
+                      type="button"
+                      onClick={() => setImageUrl(p.url)}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: '999px',
+                        border: imageUrl === p.url ? '1.5px solid var(--primary)' : '1px solid var(--border)',
+                        backgroundColor: imageUrl === p.url ? 'var(--primary-light)' : '#F8FAFC',
+                        color: imageUrl === p.url ? 'var(--primary)' : 'var(--text-main)',
+                        fontSize: '0.75rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>

@@ -483,12 +483,40 @@ export const SettingsPage: React.FC = () => {
               <div className="form-group">
                 <label className="form-label">Link Ảnh Bìa / Banner Tiệm</label>
                 <input
-                  type="url"
+                  type="text"
                   className="form-input"
-                  placeholder="https://..."
+                  placeholder="/assets/salon_interior_luxury.jpg hoặc link ảnh"
                   value={bannerUrl}
                   onChange={(e) => setBannerUrl(e.target.value)}
                 />
+                <div style={{ marginTop: '8px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  Gợi ý ảnh bìa chất lượng cao:
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '4px' }}>
+                  {[
+                    { label: '🏛️ Salon Hàn Quốc', url: '/assets/salon_interior_luxury.jpg' },
+                    { label: '🌿 Spa Thảo Mộc', url: '/assets/emerald_velvet_nails.jpg' },
+                    { label: '✨ Tráng Gương Nude', url: '/assets/french_chrome_nails.jpg' },
+                    { label: '💎 Editorial Spa', url: '/assets/luxury_nail_hero.jpg' }
+                  ].map((b) => (
+                    <button
+                      key={b.url}
+                      type="button"
+                      onClick={() => setBannerUrl(b.url)}
+                      style={{
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        border: bannerUrl === b.url ? '1px solid var(--primary)' : '1px solid var(--border)',
+                        background: bannerUrl === b.url ? 'var(--primary-light)' : '#F8FAFC',
+                        color: bannerUrl === b.url ? 'var(--primary)' : 'var(--text-main)',
+                        fontSize: '0.72rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 

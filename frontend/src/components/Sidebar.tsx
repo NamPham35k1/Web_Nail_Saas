@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Sparkles, Users, UserCheck, Settings, Wand2, Globe } from 'lucide-react';
+import { LayoutDashboard, Calendar, Sparkles, Users, UserCheck, Settings, Wand2, Globe, Palette } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const Sidebar: React.FC = () => {
@@ -12,6 +12,7 @@ export const Sidebar: React.FC = () => {
     { to: '/dashboard/services', label: 'Dịch Vụ & Bảng Giá', icon: Sparkles },
     { to: '/dashboard/staff', label: 'Đội Ngũ Nhân Viên', icon: Users },
     { to: '/dashboard/customers', label: 'Hồ Sơ Khách Hàng', icon: UserCheck },
+    { to: '/dashboard/templates', label: 'Kho Mẫu Giao Diện', icon: Palette },
     { to: '/dashboard/settings', label: 'Cài Đặt Thương Hiệu', icon: Settings },
   ];
 

@@ -570,14 +570,19 @@ export const OnboardingWizard: React.FC = () => {
 
               {/* Template Themes Selector */}
               <div style={{ marginBottom: '28px' }}>
-                <label className="form-label" style={{ marginBottom: '12px', fontSize: '0.95rem' }}>
-                  Bộ Sưu Tập Template Giao Diện Website (Chọn 1 mẫu):
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                  <label className="form-label" style={{ fontSize: '0.95rem', margin: 0 }}>
+                    Chọn Phong Cách Mẫu Website (Templates):
+                  </label>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Bao gồm 5 mẫu bố cục riêng biệt cho từng gu thẩm mỹ
+                  </span>
+                </div>
 
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                  gap: '14px'
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: '16px'
                 }}>
                   {Object.values(TEMPLATE_THEMES).map((theme) => {
                     const isSelected = templateTheme === theme.id;
@@ -590,55 +595,127 @@ export const OnboardingWizard: React.FC = () => {
                         }}
                         style={{
                           border: isSelected ? `2.5px solid ${theme.primaryColor}` : '1.5px solid var(--border)',
-                          borderRadius: '16px',
-                          padding: '16px',
+                          borderRadius: '18px',
+                          overflow: 'hidden',
                           background: theme.isDark ? '#0F172A' : '#FFFFFF',
                           color: theme.isDark ? '#F8FAFC' : 'var(--text-main)',
                           cursor: 'pointer',
                           position: 'relative',
-                          boxShadow: isSelected ? `0 8px 24px -4px ${theme.primaryColor}40` : 'var(--shadow-sm)',
-                          transition: 'all 0.2s ease',
+                          boxShadow: isSelected ? `0 10px 30px -4px ${theme.primaryColor}50` : 'var(--shadow-sm)',
+                          transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                           display: 'flex',
                           flexDirection: 'column',
-                          justifyContent: 'space-between'
+                          transform: isSelected ? 'translateY(-3px)' : 'none'
                         }}
                       >
-                        <div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        {/* Mini Banner Preview */}
+                        <div style={{
+                          height: '95px',
+                          backgroundImage: `url(${theme.bannerPlaceholder})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          position: 'relative'
+                        }}>
+                          <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: theme.isDark
+                              ? 'linear-gradient(180deg, rgba(11,15,25,0.4) 0%, rgba(15,23,42,0.95) 100%)'
+                              : 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0.9) 100%)'
+                          }} />
+                          <div style={{
+                            position: 'absolute',
+                            top: '8px',
+                            left: '8px',
+                            display: 'flex',
+                            gap: '6px'
+                          }}>
                             <span style={{
-                              fontSize: '0.7rem',
-                              fontWeight: 700,
+                              fontSize: '0.68rem',
+                              fontWeight: 800,
                               padding: '2px 8px',
                               borderRadius: '999px',
-                              background: `${theme.primaryColor}20`,
-                              color: theme.primaryColor
+                              background: theme.primaryColor,
+                              color: theme.isDark ? '#0B0F19' : '#FFFFFF'
                             }}>
                               {theme.badge}
                             </span>
-                            <div style={{
-                              width: '20px',
-                              height: '20px',
-                              borderRadius: '50%',
-                              backgroundColor: theme.primaryColor,
-                              border: isSelected ? '2px solid #FFF' : 'none'
-                            }} />
+                            <span style={{
+                              fontSize: '0.68rem',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: '999px',
+                              background: 'rgba(0,0,0,0.5)',
+                              color: '#FFFFFF'
+                            }}>
+                              {theme.previewTag}
+                            </span>
                           </div>
 
-                          <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
-                            {theme.name}
-                          </h4>
-                          <div style={{ fontSize: '0.78rem', color: theme.primaryColor, fontWeight: 600, marginBottom: '6px' }}>
-                            {theme.subtitle}
+                          <div style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            width: '22px',
+                            height: '22px',
+                            borderRadius: '50%',
+                            backgroundColor: theme.primaryColor,
+                            border: isSelected ? '2px solid #FFF' : 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#FFF',
+                            fontSize: '12px',
+                            fontWeight: 800
+                          }}>
+                            {isSelected ? '✓' : ''}
                           </div>
-                          <p style={{ fontSize: '0.8rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.4 }}>
-                            {theme.description}
-                          </p>
                         </div>
 
-                        <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: isSelected ? theme.primaryColor : 'var(--text-muted)' }}>
-                            {isSelected ? '✓ Đang áp dụng' : 'Bấm để chọn'}
-                          </span>
+                        {/* Content */}
+                        <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                          <div>
+                            <h4 style={{ fontSize: '1.02rem', fontWeight: 800, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
+                              {theme.name}
+                            </h4>
+                            <div style={{ fontSize: '0.78rem', color: theme.primaryColor, fontWeight: 700, marginBottom: '8px' }}>
+                              {theme.subtitle}
+                            </div>
+                            <p style={{ fontSize: '0.8rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.45, marginBottom: '12px' }}>
+                              {theme.description}
+                            </p>
+
+                            {/* Feature Bullets */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '14px' }}>
+                              {theme.features?.map((f, idx) => (
+                                <div key={idx} style={{ fontSize: '0.75rem', color: theme.isDark ? '#CBD5E1' : '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ color: theme.primaryColor, fontWeight: 800 }}>•</span>
+                                  <span>{f}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div style={{
+                            paddingTop: '10px',
+                            borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`,
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}>
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                              <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: theme.primaryColor }} />
+                              <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: theme.bgColor, border: '1px solid #CBD5E1' }} />
+                              <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: theme.cardBg, border: '1px solid #CBD5E1' }} />
+                            </div>
+                            <span style={{
+                              fontSize: '0.78rem',
+                              fontWeight: 800,
+                              color: isSelected ? theme.primaryColor : 'var(--text-muted)'
+                            }}>
+                              {isSelected ? '✓ Đang áp dụng' : 'Bấm để chọn mẫu'}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     );
@@ -1024,52 +1101,96 @@ export const OnboardingWizard: React.FC = () => {
                 </p>
               </div>
 
-              {/* Preview Card */}
-              <div style={{
-                border: '2px solid var(--border)',
-                borderRadius: '20px',
-                overflow: 'hidden',
-                background: '#FFFFFF',
-                boxShadow: 'var(--shadow-md)'
-              }}>
-                {/* Header Mockup */}
-                <div style={{
-                  padding: '28px',
-                  background: `linear-gradient(135deg, ${brandColor} 0%, #2A2A2A 100%)`,
-                  color: '#FFFFFF'
-                }}>
-                  <span style={{
-                    fontSize: '0.75rem',
-                    background: 'rgba(255,255,255,0.2)',
-                    padding: '3px 10px',
-                    borderRadius: '999px',
-                    fontWeight: 700
+              {/* Theme-Aware Live Preview Card */}
+              {(() => {
+                const currentTheme = TEMPLATE_THEMES[templateTheme] || TEMPLATE_THEMES.BLUSH_KOREA;
+                const isDarkTheme = currentTheme.isDark;
+                return (
+                  <div style={{
+                    border: isDarkTheme ? '2px solid rgba(212, 175, 55, 0.4)' : '2px solid var(--border)',
+                    borderRadius: currentTheme.cardBorderRadius || '20px',
+                    overflow: 'hidden',
+                    background: currentTheme.cardBg,
+                    color: currentTheme.textColor,
+                    boxShadow: isDarkTheme ? '0 16px 40px rgba(0, 0, 0, 0.6)' : 'var(--shadow-md)',
+                    transition: 'all 0.3s ease'
                   }}>
-                    XEM TRƯỚC WEBSITE
-                  </span>
-                  <h3 style={{ fontSize: '1.6rem', marginTop: '10px', color: '#FFF' }}>{salonName || 'Tiệm Nail Của Bạn'}</h3>
-                  <p style={{ fontSize: '0.85rem', opacity: 0.9 }}>📍 {address || 'Chưa cập nhật địa chỉ'} | 📞 {phone || 'Chưa có SĐT'}</p>
-                </div>
-
-                {/* Body Summary */}
-                <div style={{ padding: '24px' }}>
-                  <h4 style={{ fontSize: '1rem', marginBottom: '12px' }}>Dịch vụ nổi bật ({services.length}):</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-                    {services.slice(0, 3).map((s, i) => (
-                      <div key={i} style={{ padding: '12px', background: 'var(--bg-subtle)', borderRadius: '12px' }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{s.name}</div>
-                        <div style={{ color: brandColor, fontWeight: 700, fontSize: '0.88rem' }}>
-                          {Number(s.price).toLocaleString()}đ <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>({s.durationMinutes}p)</span>
-                        </div>
+                    {/* Header Mockup */}
+                    <div style={{
+                      padding: '30px 28px',
+                      background: isDarkTheme
+                        ? 'linear-gradient(135deg, #151C2C 0%, #0B0F19 100%)'
+                        : currentTheme.layoutType === 'salon-landing'
+                        ? 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)'
+                        : `linear-gradient(135deg, ${brandColor} 0%, #1E293B 100%)`,
+                      color: '#FFFFFF',
+                      borderBottom: isDarkTheme ? '1px solid rgba(212, 175, 55, 0.3)' : 'none'
+                    }}>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{
+                          fontSize: '0.72rem',
+                          background: isDarkTheme ? 'rgba(212, 175, 55, 0.3)' : 'rgba(255,255,255,0.25)',
+                          color: isDarkTheme ? '#F3D279' : '#FFFFFF',
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          fontWeight: 800,
+                          letterSpacing: '0.5px'
+                        }}>
+                          {currentTheme.name}
+                        </span>
+                        <span style={{ fontSize: '0.72rem', opacity: 0.85 }}>● Xem Trước Giao Diện Khách Thấy</span>
                       </div>
-                    ))}
-                  </div>
+                      <h3 style={{
+                        fontSize: '1.75rem',
+                        fontWeight: 800,
+                        color: '#FFF',
+                        fontFamily: isDarkTheme ? "'Playfair Display', Georgia, serif" : 'inherit'
+                      }}>
+                        {salonName || 'Tiệm Nail Của Bạn'}
+                      </h3>
+                      <p style={{ fontSize: '0.85rem', opacity: 0.9, marginTop: '4px' }}>
+                        📍 {address || 'Chưa cập nhật địa chỉ'} | 📞 {phone || 'Chưa có SĐT'}
+                      </p>
+                    </div>
 
-                  <div style={{ background: 'var(--bg-subtle)', padding: '12px 16px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                    <strong>Chính sách đặt lịch:</strong> {bookingPolicy}
+                    {/* Body Summary */}
+                    <div style={{ padding: '24px', backgroundColor: currentTheme.bgColor }}>
+                      <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '12px', color: currentTheme.textColor }}>
+                        Dịch vụ mẫu nổi bật ({services.length}):
+                      </h4>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+                        {services.slice(0, 3).map((s, i) => (
+                          <div key={i} style={{
+                            padding: '14px',
+                            background: currentTheme.cardBg,
+                            borderRadius: '14px',
+                            border: isDarkTheme ? '1px solid rgba(212, 175, 55, 0.25)' : '1px solid var(--border)',
+                            boxShadow: 'var(--shadow-sm)'
+                          }}>
+                            <div style={{ fontWeight: 700, fontSize: '0.9rem', color: currentTheme.textColor }}>{s.name}</div>
+                            <div style={{ color: brandColor, fontWeight: 800, fontSize: '0.92rem', marginTop: '4px' }}>
+                              {Number(s.price).toLocaleString()}đ <span style={{ fontSize: '0.75rem', color: currentTheme.textMuted, fontWeight: 500 }}>({s.durationMinutes}p)</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {bookingPolicy && (
+                        <div style={{
+                          background: currentTheme.cardBg,
+                          border: isDarkTheme ? '1px solid rgba(212, 175, 55, 0.2)' : '1px solid var(--border)',
+                          padding: '12px 16px',
+                          borderRadius: '12px',
+                          fontSize: '0.85rem',
+                          color: currentTheme.textColor
+                        }}>
+                          <strong>Chính sách đặt lịch:</strong> {bookingPolicy}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
+                );
+              })()}
             </div>
           )}
 

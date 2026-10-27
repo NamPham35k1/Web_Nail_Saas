@@ -14,6 +14,7 @@ import { AppointmentsPage } from './pages/Dashboard/AppointmentsPage';
 import { ServicesPage } from './pages/Dashboard/ServicesPage';
 import { StaffPage } from './pages/Dashboard/StaffPage';
 import { CustomersPage } from './pages/Dashboard/CustomersPage';
+import { TemplatesPage } from './pages/Dashboard/TemplatesPage';
 import { SettingsPage } from './pages/Dashboard/SettingsPage';
 
 // Protected Route Wrapper for Onboarding
@@ -49,6 +50,7 @@ export const App: React.FC = () => {
             <Route path="services" element={<ServicesPage />} />
             <Route path="staff" element={<StaffPage />} />
             <Route path="customers" element={<CustomersPage />} />
+            <Route path="templates" element={<TemplatesPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 

@@ -350,14 +350,19 @@ export const SettingsPage: React.FC = () => {
           <form onSubmit={handleSaveBranding}>
             {/* Template Themes Selector */}
             <div style={{ marginBottom: '28px' }}>
-              <label className="form-label" style={{ marginBottom: '12px', fontSize: '0.95rem' }}>
-                Chọn Mẫu Giao Diện Website (Templates):
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                <label className="form-label" style={{ fontSize: '0.95rem', margin: 0 }}>
+                  Chọn Mẫu Giao Diện Website (Templates):
+                </label>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  Website đặt lịch của bạn sẽ thay đổi bố cục và phong cách ngay sau khi lưu
+                </span>
+              </div>
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '14px'
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '16px'
               }}>
                 {Object.values(TEMPLATE_THEMES).map((theme) => {
                   const isSelected = templateTheme === theme.id;
@@ -371,53 +376,121 @@ export const SettingsPage: React.FC = () => {
                       style={{
                         border: isSelected ? `2.5px solid ${theme.primaryColor}` : '1.5px solid var(--border)',
                         borderRadius: '16px',
-                        padding: '16px',
+                        overflow: 'hidden',
                         background: theme.isDark ? '#0F172A' : '#FFFFFF',
                         color: theme.isDark ? '#F8FAFC' : 'var(--text-main)',
                         cursor: 'pointer',
                         position: 'relative',
-                        boxShadow: isSelected ? `0 8px 24px -4px ${theme.primaryColor}40` : 'var(--shadow-sm)',
-                        transition: 'all 0.2s ease',
+                        boxShadow: isSelected ? `0 8px 24px -4px ${theme.primaryColor}50` : 'var(--shadow-sm)',
+                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'space-between'
+                        transform: isSelected ? 'translateY(-2px)' : 'none'
                       }}
                     >
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      {/* Mini Banner Preview */}
+                      <div style={{
+                        height: '85px',
+                        backgroundImage: `url(${theme.bannerPlaceholder})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        position: 'relative'
+                      }}>
+                        <div style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: theme.isDark
+                            ? 'linear-gradient(180deg, rgba(11,15,25,0.3) 0%, rgba(15,23,42,0.9) 100%)'
+                            : 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0.85) 100%)'
+                        }} />
+                        <div style={{
+                          position: 'absolute',
+                          top: '6px',
+                          left: '8px',
+                          display: 'flex',
+                          gap: '6px'
+                        }}>
                           <span style={{
-                            fontSize: '0.68rem',
-                            fontWeight: 700,
+                            fontSize: '0.65rem',
+                            fontWeight: 800,
                             padding: '2px 8px',
                             borderRadius: '999px',
-                            background: `${theme.primaryColor}20`,
-                            color: theme.primaryColor
+                            background: theme.primaryColor,
+                            color: theme.isDark ? '#0B0F19' : '#FFFFFF'
                           }}>
                             {theme.badge}
                           </span>
-                          <div style={{
-                            width: '18px',
-                            height: '18px',
-                            borderRadius: '50%',
-                            backgroundColor: theme.primaryColor
-                          }} />
+                          <span style={{
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: '999px',
+                            background: 'rgba(0,0,0,0.5)',
+                            color: '#FFFFFF'
+                          }}>
+                            {theme.previewTag}
+                          </span>
                         </div>
 
-                        <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
-                          {theme.name}
-                        </h4>
-                        <div style={{ fontSize: '0.75rem', color: theme.primaryColor, fontWeight: 600, marginBottom: '6px' }}>
-                          {theme.subtitle}
+                        <div style={{
+                          position: 'absolute',
+                          top: '6px',
+                          right: '8px',
+                          width: '20px',
+                          height: '20px',
+                          borderRadius: '50%',
+                          backgroundColor: theme.primaryColor,
+                          border: isSelected ? '2px solid #FFF' : 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#FFF',
+                          fontSize: '11px',
+                          fontWeight: 800
+                        }}>
+                          {isSelected ? '✓' : ''}
                         </div>
-                        <p style={{ fontSize: '0.78rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.4 }}>
-                          {theme.description}
-                        </p>
                       </div>
 
-                      <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`, textAlign: 'right' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: isSelected ? theme.primaryColor : 'var(--text-muted)' }}>
-                          {isSelected ? '✓ Đang chọn' : 'Chọn mẫu'}
-                        </span>
+                      {/* Content */}
+                      <div style={{ padding: '14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div>
+                          <h4 style={{ fontSize: '0.98rem', fontWeight: 800, marginBottom: '2px', color: theme.isDark ? '#FFF' : 'var(--text-main)' }}>
+                            {theme.name}
+                          </h4>
+                          <div style={{ fontSize: '0.75rem', color: theme.primaryColor, fontWeight: 700, marginBottom: '6px' }}>
+                            {theme.subtitle}
+                          </div>
+                          <p style={{ fontSize: '0.78rem', color: theme.isDark ? '#94A3B8' : 'var(--text-muted)', lineHeight: 1.4, marginBottom: '10px' }}>
+                            {theme.description}
+                          </p>
+
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '10px' }}>
+                            {theme.features?.slice(0, 2).map((f, idx) => (
+                              <div key={idx} style={{ fontSize: '0.72rem', color: theme.isDark ? '#CBD5E1' : '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span style={{ color: theme.primaryColor, fontWeight: 800 }}>•</span>
+                                <span>{f}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div style={{
+                          paddingTop: '8px',
+                          borderTop: `1px solid ${theme.isDark ? '#334155' : 'var(--border)'}`,
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          <div style={{ display: 'flex', gap: '4px' }}>
+                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: theme.primaryColor }} />
+                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: theme.bgColor, border: '1px solid #CBD5E1' }} />
+                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: theme.cardBg, border: '1px solid #CBD5E1' }} />
+                          </div>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: isSelected ? theme.primaryColor : 'var(--text-muted)' }}>
+                            {isSelected ? '✓ Đang chọn' : 'Chọn mẫu'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );

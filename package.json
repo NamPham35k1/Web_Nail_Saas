@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "NailVibe - Nền tảng SaaS đặt lịch Nail đa khách hàng (Multi-Tenant)",
   "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"blue,magenta\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
@@ -11,7 +12,17 @@
     "build:frontend": "cd frontend && npm run build",
     "build:all": "npm run build:backend && npm run build:frontend"
   },
-  "keywords": ["nailvibe", "saas", "booking", "multi-tenant", "salon", "nail"],
+  "keywords": [
+    "nailvibe",
+    "saas",
+    "booking",
+    "multi-tenant",
+    "salon",
+    "nail"
+  ],
   "author": "NailVibe Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
 }

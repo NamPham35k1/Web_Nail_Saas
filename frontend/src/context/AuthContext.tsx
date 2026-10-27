@@ -16,6 +16,7 @@ interface Tenant {
   isPublished?: boolean;
   plan?: string;
   onboarding?: any;
+  settings?: any;
 }
 
 interface AuthContextType {
